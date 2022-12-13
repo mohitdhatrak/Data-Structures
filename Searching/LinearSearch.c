@@ -1,7 +1,7 @@
 #include <conio.h>
 #include <stdio.h>
 
-// worse case time complexity : O(n)
+// worse case time complexity : O(2n + 1) or O(2n)
 int linearSearch(int[], int, int);
 
 void main()

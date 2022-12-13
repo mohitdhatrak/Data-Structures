@@ -1,7 +1,8 @@
 #include <conio.h>
 #include <stdio.h>
 
-// worse case time complexity : O(n)
+// worse case time complexity : O(n + 2) or O(n)
+// has better time complexity than linear search
 int sentinalSearch(int[], int, int);
 
 void main()
