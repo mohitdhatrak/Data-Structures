@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "*html": "html",
+        "*njk": "html",
+        "LIN_SRCH.C": "cpp",
+        "BIN_SRCH.C": "cpp"
+    }
+}
