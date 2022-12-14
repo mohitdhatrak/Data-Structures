@@ -2,6 +2,7 @@
 #include <stdio.h>
 
 // worse case time complexity : O(log n)
+// has better time complexity than linear search
 void bubbleSort(int[], int);
 int binarySearch(int[], int, int);
 
