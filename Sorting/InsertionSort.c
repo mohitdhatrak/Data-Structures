@@ -41,15 +41,15 @@ void insertionSort(int arr[], int n)
 
     for (i = 1; i < n; i++) // i starts from 1, i.e. 2nd index
     {
-        temp = arr[i];
-        j = i - 1;
+        temp = arr[i]; // storing current index value in temp as it gets overwritten
 
-        while (j >= 0 && arr[j] > temp)
+        // j starts from left of current i
+        // arr[j] > temp condition explained - since left part is sorted already, we compare temp with the sorted part, starting from right most element of sorted part (if it is smaller than temp then no need to insert temp, it is already at correct place, hence loop won't run even once)
+        for (j = i - 1; j >= 0 && arr[j] > temp; j--)
         {
             arr[j + 1] = arr[j];
-            j--;
         }
 
-        arr[j + 1] = temp;
+        arr[j + 1] = temp; // inserting temp at the correct position in sorted part
     }
 }

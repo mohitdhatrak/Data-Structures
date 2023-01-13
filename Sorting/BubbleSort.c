@@ -39,7 +39,7 @@ void bubbleSort(int arr[], int n)
 {
     int i, j, temp;
 
-    for (i = 0; i < n - 1; i++)
+    for (i = 0; i < n - 1; i++) // or take i = 1, so i < n, and j < n - i below
     {
         for (j = 0; j < n - i - 1; j++)
         {

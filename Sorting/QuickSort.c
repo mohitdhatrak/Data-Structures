@@ -64,16 +64,16 @@ int partitionArray(int arr[], int first, int last)
     i = first;
     j = last;
 
-    // repeat whole process only till start is placed before end
+    // repeat whole process only till start (i) is placed before end (j)
     while (i < j)
     {
         // increment i only if arr[i] is NOT greater than pivot element
-        while (arr[i] <= arr[pivot] && i < last)
+        while (arr[i] <= arr[pivot] && i < last) // is (i < last) needed?
         {
             i++;
         }
 
-        // decrement j only if arr[i] is greater than pivot element
+        // decrement j only if arr[j] is greater than pivot element
         while (arr[j] > arr[pivot])
         {
             j--;

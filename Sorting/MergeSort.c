@@ -45,7 +45,7 @@ void mergeSort(int arr[], int l, int r)
 
     if (l < r)
     {
-        // Same as (l + r) / 2, but avoids overflow for large l and r
+        // Same as middle = (l + r) / 2, but avoids overflow for large l and r
         m = l + (r - l) / 2;
 
         // here recursion works like, one half gets totally divided till only 1 element is left, then that same half starts to get merged so the first half of the main array is merged and sorted, now same process happens with the second half of the main array
