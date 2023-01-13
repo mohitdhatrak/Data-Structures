@@ -100,7 +100,7 @@ void merge(int arr[], int l, int m, int r)
 
     // we don't reset values of i, j, k here hence they are continued below
 
-    // to copy any remaining elements of leftArr
+    // to copy any remaining elements of leftArr, if any left
     while (i < n1)
     {
         arr[k] = leftArr[i];
@@ -108,7 +108,7 @@ void merge(int arr[], int l, int m, int r)
         k++;
     }
 
-    // to copy any remaining elements of rightArr
+    // to copy any remaining elements of rightArr, if any left
     while (j < n2)
     {
         arr[k] = rightArr[j];
