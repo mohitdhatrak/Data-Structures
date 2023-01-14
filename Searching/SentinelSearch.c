@@ -3,7 +3,7 @@
 
 // worse case time complexity : O(n + 2) or O(n)
 // has better time complexity than linear search
-int sentinalSearch(int[], int, int);
+int sentinelSearch(int[], int, int);
 
 void main()
 {
@@ -28,17 +28,17 @@ void main()
         printf("%d ", arr[i]);
     }
 
-    findIndex = sentinalSearch(arr, element, num);
+    findIndex = sentinelSearch(arr, element, num);
 
     if (findIndex != -1)
     {
-        printf("\nElement found at position %d (index %d)", findIndex + 1, findIndex);
+        printf("\n\nElement found at position %d (index %d)", findIndex + 1, findIndex);
     }
 
     // getch();
 }
 
-int sentinalSearch(int arr[], int element, int n)
+int sentinelSearch(int arr[], int element, int n)
 {
     int i = 0;
 
@@ -61,6 +61,6 @@ int sentinalSearch(int arr[], int element, int n)
         return i;
     }
 
-    printf("\nElement not found!");
+    printf("\n\nElement not found!");
     return -1;
 }

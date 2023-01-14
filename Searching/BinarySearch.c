@@ -2,7 +2,7 @@
 #include <stdio.h>
 
 // worse case time complexity : O(log n)
-// has better time complexity than linear search
+// has better time complexity than linear search (except for small arrays) and sentinel search
 void bubbleSort(int[], int);
 int binarySearch(int[], int, int);
 
@@ -67,22 +67,28 @@ void bubbleSort(int arr[], int n)
 
 int binarySearch(int arr[], int element, int n)
 {
-    int lower = 0, higher = n - 1, middle, i;
+    int lower = 0;
+    int higher = n - 1;
+    int middle, i;
 
     for (i = 0; higher >= lower; i++)
     {
         middle = (lower + higher) / 2;
 
         if (arr[middle] == element)
+        {
             return middle;
+        }
         else if (arr[middle] < element)
         {
             lower = middle + 1;
         }
         else
+        {
             higher = middle - 1;
+        }
     }
 
-    printf("\n\nElement not found");
+    printf("\n\nElement not found!");
     return -1;
 }

@@ -31,7 +31,7 @@ void main()
 
     if (findIndex != -1)
     {
-        printf("\nElement found at position %d (index %d)", findIndex + 1, findIndex);
+        printf("\n\nElement found at position %d (index %d)", findIndex + 1, findIndex);
     }
 
     // getch();
@@ -39,14 +39,16 @@ void main()
 
 int linearSearch(int arr[], int element, int n)
 {
-    int i = 0;
+    int i;
 
     for (i = 0; i < n; i++)
     {
         if (element == arr[i])
+        {
             return i;
+        }
     }
 
-    printf("\nElement not found!");
+    printf("\n\nElement not found!");
     return -1;
 }
