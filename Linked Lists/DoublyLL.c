@@ -7,6 +7,7 @@ struct node
 {
     int data;
     struct node *next;
+    struct node *prev; // we link each node to next as well as prev node
 };
 
 // code very similar to singly LL, only few changes
@@ -14,18 +15,18 @@ struct node
 struct node *start = NULL;
 
 struct node *createList(struct node *);
-struct node *displayList(struct node *);
+struct node *displayList(struct node *); // code exact same as singly LL
 struct node *insertStart(struct node *);
 struct node *insertEnd(struct node *);
-struct node *insertBefore(struct node *); // code exact same as singly LL
-struct node *insertAfter(struct node *);  // code exact same as singly LL
+struct node *insertBefore(struct node *);
+struct node *insertAfter(struct node *);
 struct node *deleteStart(struct node *);
 struct node *deleteEnd(struct node *);
-struct node *deleteBefore(struct node *); // code exact same as singly LL
-struct node *deleteAfter(struct node *);  // code exact same as singly LL
-struct node *deleteNode(struct node *);   // code exact same as singly LL
-struct node *deleteList(struct node *);
-struct node *sortList(struct node *);
+struct node *deleteBefore(struct node *);
+struct node *deleteAfter(struct node *);
+struct node *deleteNode(struct node *);
+struct node *deleteList(struct node *); // code exact same as singly LL
+struct node *sortList(struct node *);   // code exact same as singly LL
 
 void main()
 {
@@ -60,7 +61,7 @@ void main()
             break;
 
         case 2:
-            printf("\nCircular linked list : ");
+            printf("\nDoubly linked list : ");
             start = displayList(start);
             break;
 
@@ -134,22 +135,24 @@ struct node *createList(struct node *start)
     {
         newnode = (struct node *)malloc(sizeof(struct node));
         newnode->data = data;
+        newnode->next = NULL;
 
         if (start == NULL)
         {
+            newnode->prev = NULL; // change 1
             start = newnode;
         }
         else
         {
             ptr = start;
             // we need to traverse list from start to get to the last node
-            while (ptr->next != start) // instead of ptr->next != NULL -- change 1
+            while (ptr->next != NULL)
             {
                 ptr = ptr->next;
             }
             ptr->next = newnode;
+            newnode->prev = ptr; // linking newnode to prev node - change 2
         }
-        newnode->next = start; // instead of newnode->next = NULL -- change 2
 
         printf("Enter the data: ");
         scanf("%d", &data);
@@ -170,12 +173,11 @@ struct node *displayList(struct node *start)
     }
     else
     {
-        while (ptr->next != start) // instead of ptr != NULL -- change 1
+        while (ptr != NULL)
         {
             printf("%d ", ptr->data);
             ptr = ptr->next;
         }
-        printf("%d ", ptr->data); // we add this for last element -- change 2
     }
     printf("\n");
 
@@ -184,7 +186,7 @@ struct node *displayList(struct node *start)
 
 struct node *insertStart(struct node *start)
 {
-    struct node *newnode, *ptr;
+    struct node *newnode;
     int data;
 
     printf("\nEnter the data: ");
@@ -192,16 +194,10 @@ struct node *insertStart(struct node *start)
 
     newnode = (struct node *)malloc(sizeof(struct node));
     newnode->data = data;
-
-    ptr = start; // need ptr to traverse & get the last node -- change 1
-    while (ptr->next != start)
-    {
-        ptr = ptr->next;
-    }
-
+    start->prev = newnode; // start will now have prev as newnode -- change 1
     newnode->next = start; // newnode will point to the 2nd node
+    newnode->prev = NULL;  // newnode will have prev as NULL -- change 2
     start = newnode;       // start will now point to the newnode making it the 1st node
-    ptr->next = start;     // last node will now point to the updated 'start' -- change 2
 
     return start;
 }
@@ -216,21 +212,22 @@ struct node *insertEnd(struct node *start)
 
     newnode = (struct node *)malloc(sizeof(struct node));
     newnode->data = data;
-    newnode->next = start; // instead of newnode->next = NULL -- change 1
+    newnode->next = NULL;
 
     ptr = start;
-    while (ptr->next != start) // instead of ptr->next != NULL -- change 2
+    while (ptr->next != NULL) // to find the last node
     {
         ptr = ptr->next;
     }
     ptr->next = newnode; // link last node to newnode (making it the new last node)
+    newnode->prev = ptr; // linking newnode to prev node - change 1
 
     return start;
 }
 
 struct node *insertBefore(struct node *start)
 {
-    struct node *newnode, *ptr, *preptr; // preptr is always 1 node behind ptr
+    struct node *newnode, *ptr; // no preptr needed as preptr = ptr->prev -- change 1
     int data, value;
 
     printf("\nEnter the data: ");
@@ -244,19 +241,22 @@ struct node *insertBefore(struct node *start)
     ptr = start;
     while (ptr->data != value) // we insert before 'ptr', so we compare with ptr
     {
-        preptr = ptr;
         ptr = ptr->next;
     }
     // new node is to be inserted between preptr and ptr
-    preptr->next = newnode;
+    // here we avoided preptr as we have prev node stored too in ptr,
+    // so, preptr = (ptr->prev) -- change 2
+    (ptr->prev)->next = newnode;
     newnode->next = ptr;
+    newnode->prev = (ptr->prev); // newnode will have prev as preptr -- change 3
+    ptr->prev = newnode;         // ptr will now have prev as newnode -- change 4
 
     return start;
 }
 
 struct node *insertAfter(struct node *start)
 {
-    struct node *newnode, *ptr, *preptr;
+    struct node *newnode, *ptr; // no preptr needed as preptr = ptr->prev -- change 1
     int data, value;
 
     printf("\nEnter the data: ");
@@ -267,33 +267,30 @@ struct node *insertAfter(struct node *start)
     newnode = (struct node *)malloc(sizeof(struct node));
     newnode->data = data;
 
-    ptr = start;
-    preptr = ptr;                 // need to initialize preptr here
-    while (preptr->data != value) // we insert after 'preptr', so we compare with preptr
+    // IMPORTANT
+    ptr = start->next; // or else ptr->prev becomes NULL in while condition -- change 2
+    // here we avoided preptr as we have prev node stored too in ptr,
+    // so, preptr = (ptr->prev) -- change 3
+    while ((ptr->prev)->data != value) // we insert after 'preptr', so we compare with preptr
     {
-        preptr = ptr;
         ptr = ptr->next;
     }
     // new node is to be inserted between preptr and ptr
-    preptr->next = newnode;
+    (ptr->prev)->next = newnode;
     newnode->next = ptr;
+    newnode->prev = (ptr->prev); // newnode will have prev as preptr -- change 4
+    ptr->prev = newnode;         // ptr will now have prev as newnode -- change 5
 
     return start;
 }
 
 struct node *deleteStart(struct node *start)
 {
-    struct node *ptr, *temp;
+    struct node *ptr;
 
     ptr = start; // we store it so we can free its memory space
-
-    temp = start; // need temp to traverse & get the last node -- change 1
-    while (temp->next != start)
-    {
-        temp = temp->next;
-    }
     start = start->next;
-    temp->next = start; // linking last node to updated start node -- change 2
+    start->prev = NULL; // updated start will have prev as NULL -- change 1
 
     printf("\nDeleted node with value %d \n", ptr->data);
     free(ptr);
@@ -303,15 +300,15 @@ struct node *deleteStart(struct node *start)
 
 struct node *deleteEnd(struct node *start)
 {
-    struct node *ptr, *preptr;
+    struct node *ptr; // no preptr needed as preptr = (ptr->prev) -- change 1
 
     ptr = start;
-    while (ptr->next != start) // instead of ptr->next != NULL -- change 1
+    while (ptr->next != NULL)
     {
-        preptr = ptr;
         ptr = ptr->next;
     }
-    preptr->next = start; // instead of preptr->next = NULL -- change 2
+    // preptr = (ptr->prev) -- change 2
+    (ptr->prev)->next = NULL; // 2nd last node points to NULL, now acting as last node
 
     printf("\nDeleted node with value %d \n", ptr->data);
     free(ptr);
@@ -321,7 +318,7 @@ struct node *deleteEnd(struct node *start)
 
 struct node *deleteBefore(struct node *start)
 {
-    struct node *ptr, *preptr, *postptr;
+    struct node *ptr, *postptr; // no preptr needed as preptr = (ptr->prev) -- change 1
     int value;
 
     printf("\nEnter the value before which the node has to be deleted: ");
@@ -331,11 +328,12 @@ struct node *deleteBefore(struct node *start)
     postptr = ptr->next;
     while (postptr->data != value) // here, we compare with postptr
     {
-        preptr = ptr;
         ptr = ptr->next;
         postptr = ptr->next; // post ptr is 1 node ahead of ptr
     }
-    preptr->next = postptr; // linking preptr to postptr, as ptr is deleted
+    // preptr = (ptr->prev) -- change 2
+    (ptr->prev)->next = postptr; // linking preptr next to postptr, as ptr is deleted
+    postptr->prev = (ptr->prev); // linking postptr prev to preptr -- change 3
 
     printf("\nNode deleted! \n");
     free(ptr);
@@ -345,20 +343,21 @@ struct node *deleteBefore(struct node *start)
 
 struct node *deleteAfter(struct node *start)
 {
-    struct node *ptr, *preptr;
+    struct node *ptr; // no preptr needed as preptr = (ptr->prev) -- change 1
     int value;
 
     printf("\nEnter the value after which the node has to be deleted: ");
     scanf("%d", &value);
 
-    ptr = start;
-    preptr = ptr;
-    while (preptr->data != value) // similar to insert after
+    // IMPORTANT
+    ptr = start->next; // or else ptr->prev becomes NULL in while condition -- change 2
+    // preptr = (ptr->prev) -- change 3
+    while ((ptr->prev)->data != value) // similar to insert after
     {
-        preptr = ptr;
         ptr = ptr->next;
     }
-    preptr->next = ptr->next; // linking preptr to node after ptr
+    (ptr->prev)->next = ptr->next;   // linking preptr next to node after ptr(postptr)
+    (ptr->next)->prev = (ptr->prev); // linking postptr prev to (preptr) -- change 4
 
     printf("\nNode deleted! \n");
     free(ptr);
@@ -368,7 +367,7 @@ struct node *deleteAfter(struct node *start)
 
 struct node *deleteNode(struct node *start)
 {
-    struct node *ptr, *preptr;
+    struct node *ptr; // no preptr needed as preptr = (ptr->prev) -- change 1
     int value;
 
     printf("\nEnter the value of the node which has to be deleted: ");
@@ -383,10 +382,11 @@ struct node *deleteNode(struct node *start)
     {
         while (ptr->data != value)
         {
-            preptr = ptr;
             ptr = ptr->next;
         }
-        preptr->next = ptr->next; // linking preptr to node after ptr
+        // preptr = (ptr->prev) -- change 2
+        (ptr->prev)->next = ptr->next;   // linking preptr next to (postptr)
+        (ptr->next)->prev = (ptr->prev); // linking postptr prev to (preptr) -- change 3
 
         printf("\nNode deleted! \n");
         free(ptr);
@@ -402,13 +402,13 @@ struct node *deleteList(struct node *start)
     if (start != NULL)
     {
         ptr = start;
-        while (ptr->next != start) // instead of ptr != NULL -- change 1
+        while (ptr != NULL)
         {
-            start = deleteStart(start);
+            // start = deleteStart(ptr); // we can use deleteStart function too
+            start = start->next;
+            free(ptr);
             ptr = start;
         }
-        start = deleteEnd(start); // to delete the last node
-        start = NULL;             // to reset start to NULL
         printf("\nWhole list deleted! \n");
     }
     else
@@ -431,10 +431,10 @@ struct node *sortList(struct node *start)
     else
     {
         ptr1 = start;
-        while (ptr1->next != start) // instead of ptr1->next != NULL -- change 1
+        while (ptr1->next != NULL)
         {
             ptr2 = ptr1->next;
-            while (ptr2 != start) // instead of ptr2 != NULL -- change 2
+            while (ptr2 != NULL)
             {
                 if (ptr1->data > ptr2->data)
                 {

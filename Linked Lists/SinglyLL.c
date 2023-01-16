@@ -124,6 +124,7 @@ struct node *createList(struct node *start)
     struct node *newnode, *ptr;
     int data;
 
+    printf("\nEnter -1 to stop!");
     printf("\nEnter the data: ");
     scanf("%d", &data);
 
