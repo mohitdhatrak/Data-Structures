@@ -2,7 +2,8 @@
 #include <conio.h>
 #define MAX 20
 
-int st[MAX], top = -1;
+int stack[MAX], top = -1;
+
 void push();
 void pop();
 void peek(); // shows the value at the top of the stack
@@ -22,7 +23,7 @@ void main()
         printf("\n3. Peek");
         printf("\n4. Display");
         printf("\n5. Exit");
-        printf("\nEnter your option: ");
+        printf("\nEnter your choice: ");
         scanf("%d", &choice);
 
         switch (choice)
@@ -57,7 +58,7 @@ void main()
 
 void push()
 {
-    int x;
+    int val;
 
     if (top == MAX - 1)
     {
@@ -66,10 +67,10 @@ void push()
     else
     {
         printf("\nEnter a number: ");
-        scanf("%d", &x);
+        scanf("%d", &val);
 
-        st[++top] = x;
-        printf("Pushed element is %d \n", st[top]);
+        stack[++top] = val;
+        printf("Pushed element is %d \n", stack[top]);
     }
 }
 
@@ -81,7 +82,7 @@ void pop()
     }
     else
     {
-        printf("Popped element is %d \n", st[top--]);
+        printf("Popped element is %d \n", stack[top--]);
     }
 }
 
@@ -93,7 +94,7 @@ void peek()
     }
     else
     {
-        printf("Peeked element is %d \n", st[top]);
+        printf("Peeked element is %d \n", stack[top]);
     }
 }
 
@@ -110,7 +111,7 @@ void display()
         printf("Elements in stack from top to bottom: ");
         for (i = top; i >= 0; i--)
         {
-            printf("%d ", st[i]);
+            printf("%d ", stack[i]);
         }
         printf("\n");
     }
