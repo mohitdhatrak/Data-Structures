@@ -67,7 +67,7 @@ void insert()
     printf("Enter the number to be inserted in the queue: ");
     scanf("%d", &num);
 
-    if (front == 0 && rear == MAX - 1) // overflow condition --  change 1
+    if ((front == 0 && rear == MAX - 1) || (rear == front - 1)) // overflow condition --  change 1
     {
         printf("Queue overflow!\n");
     }
